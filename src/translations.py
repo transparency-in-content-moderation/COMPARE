@@ -95,20 +95,20 @@ def save_translation_as_markdown(translated_text, filename):
 
 
 # 1. Example Usage (DeepL)
-with open('../data/6.cn/6.cn.md', "r") as file:
+with open('../data/Community Guidelines/6.cn/6.cn.md', "r") as file:
     text=file.read()
-text
+print(text)
 
 text_to_translate = text
 translated_text = translate_text_deepl(text_to_translate, "EN")  
 print(translated_text)
 
 if translated_text:
-    save_translation_as_markdown(translated_text, "../data/6.cn/6.cn_en.md")
+    save_translation_as_markdown(translated_text, "../data/Community Guidelines/6.cn/6.cn_en.md")
 
 
 # 2. Example Usage (long text - DeepL)
-with open('../data/Douyin/Douyin.md', "r") as file:
+with open('../data/Community Guidelines/Douyin/Douyin.md', "r") as file:
     text = file.read()
 
 
@@ -128,14 +128,14 @@ for part in parts:
 full_translation = ''.join(translated_parts)
 
 if translated_text:
-    save_translation_as_markdown(full_translation, "../data/Douyin/Douyin_en.md")
+    save_translation_as_markdown(full_translation, "../data/Community Guidelines/Douyin/Douyin_en.md")
+
 
 # 3. Example Usage (Google Cloud Translation)
-with open('../data/Ninisite/Ninisite.md', "r") as file:
+with open('../data/Community Guidelines/Ninisite/Ninisite.md', "r") as file:
     text=file.read()
-text
 
 input_text = text
-output_file = '../data/Ninisite/Ninisite_en.md'
+output_file = '../data/Community Guidelines/Ninisite/Ninisite_en.md'
 target_language='en'
 translate_text_google(input_text, target_language, output_file)
