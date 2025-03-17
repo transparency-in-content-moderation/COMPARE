@@ -104,11 +104,11 @@ translated_text = translate_text_deepl(text_to_translate, "EN")
 print(translated_text)
 
 if translated_text:
-    save_translation_as_markdown(translated_text, "6.cn/6.cn_en.md")
+    save_translation_as_markdown(translated_text, "../data/6.cn/6.cn_en.md")
 
 
 # 2. Example Usage (long text - DeepL)
-with open('Douyin/Douyin.md', "r") as file:
+with open('../data/Douyin/Douyin.md', "r") as file:
     text = file.read()
 
 
@@ -128,14 +128,14 @@ for part in parts:
 full_translation = ''.join(translated_parts)
 
 if translated_text:
-    save_translation_as_markdown(full_translation, "Douyin/Douyin_en.md")
+    save_translation_as_markdown(full_translation, "../data/Douyin/Douyin_en.md")
 
 # 3. Example Usage (Google Cloud Translation)
-with open('Ninisite/Ninisite.md', "r") as file:
+with open('../data/Ninisite/Ninisite.md', "r") as file:
     text=file.read()
 text
 
 input_text = text
-output_file = 'Ninisite/Ninisite_en.md'
+output_file = '../data/Ninisite/Ninisite_en.md'
 target_language='en'
 translate_text_google(input_text, target_language, output_file)
