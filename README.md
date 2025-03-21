@@ -14,6 +14,8 @@ If you want to use our data, we kindly ask you to reference the corresponding pa
 
 For each platform, we collected information about the country, the size, the age, and the type of the platforms as well as whether they are decentralized or considered as alt-tech platforms.
 
+To identify larger platforms, we started with an initial list of major social media platforms by combining the most popular social media platforms from ten global and regional (U.S., China, Germany) rankings. From this candidate list, we then selected those platforms for inclusion in the dataset if they fit our definition of “social media platforms,” namely if they (i) host user-generated content that is (ii) at least to some extent public-facing and in principle visible to anyone upon registration and (iii) that stays consistently accessible over a longer period.
+
 | **Variable**       | **Definition** |
 |--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Country (countrycode)     | We coded the platform country based on the country of the platform’s headquarters. To retrieve this information, we consulted the platforms’ self-descriptions on their website (About sections) or their LinkedIn accounts. Additionally, we used sources like Crunchbase and Wikipedia. This information is procided with ISO Alpha-3 codes for the countries. |
@@ -25,7 +27,7 @@ For each platform, we collected information about the country, the size, the age
 
 ### 2. Links to Content Moderation Policies
 
-For each platform, COMPARE includes links to six different types of platform policies: (1) the privacy policies, (2) the terms of services, (3) the community guidelines, (4) the transparency reports, and information about (5) a platform’s content moderation enforcement options and (6) how the moderation process is structured. The links were collected from October 2023 to January 2024. 
+For each platform, COMPARE includes links to six different types of platform policies: (1) the privacy policies, (2) the terms of services, (3) the community guidelines, (4) the transparency reports, (5) and information about a platform’s content moderation enforcement options and (6) how the moderation process is structured. The links were collected in the period between October 2023 to January 2024. 
 
 As we were interested in how transparent platforms themselves are, these links in general refer to statements of the platforms on their websites except if a platform has incorporated the policies of an affiliated company. For example, as YouTube is part of Google, it relies on Google’s privacy policy. Moreover, links could be collected and reused for multiple variables if they contain the corresponding information. For example, platforms might decide to address how they enforce content moderation and how the content moderation process is structured under the same link.
 
@@ -45,7 +47,7 @@ As we were interested in how transparent platforms themselves are, these links i
 
 We also provide the text of community guidelines which are sometimes also referred to as community standards or codes of conduct and the corresponding meta data (ADD LINK TO FILE). 
 
-Of the 132 platforms in the COMPARE dataset, 92 platforms have published such guidelines. We included 89 community guidelines because Instagram and Threads rely on Facebook’s guidelines and were thus not included again. Moreover, Caffeine went offline before we finalized the scraping.
+Of the 132 platforms in the COMPARE dataset, 92 platforms have published such guidelines. We included 89 community guidelines because Instagram and Threads rely on Facebook’s guidelines and were thus not included again. Moreover, the platform Caffeine went offline before we finalized the scraping.
 
 We scraped 76 community guidelines in August 2024 from Germany, using the default language settings. This resulted in 54 English and 22 non-English guidelines. We then translated the non-English texts into English using primarily the DeepL API. Because of language availability, we used the Google Cloud Translation API for the two Persian texts. See [here](https://github.com/transparency-in-content-moderation/COMPARE/blob/main/src/translations.py) for the translation script.
 
