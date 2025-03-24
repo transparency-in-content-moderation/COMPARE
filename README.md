@@ -49,7 +49,7 @@ Of the 132 platforms in the COMPARE dataset, 92 platforms have published such gu
 
 We collected 76 community guidelines between August 4th and September 16th, 2024 using a computer located in Germany, using the default language settings. This resulted in 54 English and 22 non-English guidelines. We then translated the non-English texts into English using primarily the DeepL API. Because of language availability, we used the Google Cloud Translation API for the two Persian texts. See [here](./src/translations.py) for the translation script.
 
-These can be complemented with 13 community guidelines from the [Platform Governance Archive’s (PGA) GitHub Repository](https://github.com/OpenTermsArchive/pga-versions) (Katzenbach et al., 2023). In order to use guidelines from a comparable timeframe please refer to [the version from August 13, 2024](./data/pga-versions/).
+These can be complemented with 13 community guidelines from the [Platform Governance Archive’s (PGA) GitHub Repository](https://github.com/OpenTermsArchive/pga-versions) (Katzenbach et al., 2023). In order to use guidelines from a comparable timeframe please refer to [the version from August 13, 2024](https://github.com/OpenTermsArchive/pga-versions/tree/c4e6cb868a4b1adc24c457ffb965d24454c89d12), also referenced as Git submodule in the [data/](./data/) directory.
 
 
 ### References
