@@ -1,10 +1,9 @@
 # COMPARE (Content Moderation Policies and Reports) - Dataset
 
-This repository consists of three parts. We make available a dataset combining general information about 132 platforms with six links to websites where platforms report on different content moderation aspects [here](https://github.com/transparency-in-content-moderation/COMPARE/blob/main/data/COMPARE.csv). 
-Moreover, we provide the text of 76 community guidelines [here](https://github.com/transparency-in-content-moderation/COMPARE/tree/main/data/community-guidelines). For more information please refer to our [ICWSM paper](INSERT LINK). 
+This repository consists of three parts. We make available a dataset combining general information about 132 platforms with six links to websites where platforms report on different content moderation aspects [here](./data/COMPARE.csv).
+Moreover, we provide the text of [76 community guidelines](./data/community-guidelines). For more information please refer to our [ICWSM paper](INSERT LINK).
 
-In this [folder](https://github.com/transparency-in-content-moderation/COMPARE/tree/main/src) you can find the scripts which were used to scrape and translate the community guidelines. 
-
+In the folder [src](./src/) you can find the scripts which were used to scrape and translate the community guidelines.
 If you want to use our data, we kindly ask you to reference the corresponding paper.
 
 **Recommended Citation**: Nahrgang, M., Weidmann, N. B., Quint, F., Nagel, S., Theocharis, Y., & Roberts, M. E. (2025). Written for Lawyers or Users? Mapping the Complexity of Community Guidelines. Proceedings of the International AAAI Conference on Web and Social Media.
@@ -42,16 +41,16 @@ As we were interested in how transparent platforms themselves are, these links i
 | Process (cmpro)            | URL to a platform’s website where the platform describes how the content moderation process is organized, for example, if it relies on automated means, users, or reviewers. |
 
 
-
 ### 3. Community Guidelines
 
-We also provide the text of community guidelines which are sometimes also referred to as community standards or codes of conduct and the corresponding meta data (ADD LINK TO FILE). 
+We also provide the text of community guidelines which are sometimes also referred to as community standards or codes of conduct and the [corresponding collection meta data](./data/community-guidelines/collection-metadata.csv).
 
 Of the 132 platforms in the COMPARE dataset, 92 platforms have published such guidelines. We included 89 community guidelines because Instagram and Threads rely on Facebook’s guidelines and were thus not included again. Moreover, the platform Caffeine went offline before we finalized the scraping.
 
-We scraped 76 community guidelines in August 2024 from Germany, using the default language settings. This resulted in 54 English and 22 non-English guidelines. We then translated the non-English texts into English using primarily the DeepL API. Because of language availability, we used the Google Cloud Translation API for the two Persian texts. See [here](https://github.com/transparency-in-content-moderation/COMPARE/blob/main/src/translations.py) for the translation script.
+We collected 76 community guidelines between August 4th and September 16th, 2024 using a computer located in Germany, using the default language settings. This resulted in 54 English and 22 non-English guidelines. We then translated the non-English texts into English using primarily the DeepL API. Because of language availability, we used the Google Cloud Translation API for the two Persian texts. See [here](./src/translations.py) for the translation script.
 
-These can be complemented with 13 community guidelines from the [Platform Governance Archive’s (PGA) GitHub Repository](https://github.com/OpenTermsArchive/pga-versions) (Katzenbach et al., 2023). In order to use guidelines from a comparable timeframe please refer to [the versions from August 13, 2024](ADD LINK TO SUBMODULE).
+These can be complemented with 13 community guidelines from the [Platform Governance Archive’s (PGA) GitHub Repository](https://github.com/OpenTermsArchive/pga-versions) (Katzenbach et al., 2023). In order to use guidelines from a comparable timeframe please refer to [the version from August 13, 2024](./data/pga-versions/).
+
 
 ### References
 
