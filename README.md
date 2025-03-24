@@ -43,7 +43,7 @@ As we were interested in how transparent platforms themselves are, these links i
 
 ### 3. Community Guidelines
 
-We also provide the text of community guidelines which are sometimes also referred to as community standards or codes of conduct and the [corresponding collection meta data](./data/community-guidelines/collection-metadata.csv).
+We also provide the text of community guidelines which are sometimes also referred to as community standards or codes of conduct and the [corresponding collection meta data](./data/community-guidelines-metadata.csv).
 
 Of the 132 platforms in the COMPARE dataset, 92 platforms have published such guidelines. We included 89 community guidelines because Instagram and Threads rely on Facebook’s guidelines and were thus not included again. Moreover, the platform Caffeine went offline before we finalized the scraping.
 
