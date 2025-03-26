@@ -318,7 +318,45 @@ rm(graph_readability_age,graph_readability_area,graph_readability_size,graph_rea
 ## Figure 6 ####
 # Benchmarking readability
 
-# make a decision how to handle Christian's data -> talk to Sebastian
+# Reading in benchmarking scores
+benchmarking_readability_scores <-read.csv("../replication-data/benchmarking_readability_scores.csv")
+benchmarking_readability_scores$X <- NULL
+
+# Scores for abstracts and newspaper articles are replicated based on data and scripts from Rauh (2023) 
+# (see here: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/UGGXUF)
+# The score for the Tweets is based on data from Özdemir and Rauh (2022) and the score for the
+# Privacy Policies was extracted from Jensen and Potts(2004). For full references please consult the paper.
+
+
+# Calculating stats for community guidelines
+stats_comguides <- df %>% 
+  summarise(
+    text_type = "Community Guidelines",
+    mean_readability = mean(Flesch_Kincaid, na.rm = TRUE),
+    sd_readability = sd(Flesch_Kincaid, na.rm = TRUE),
+    n = sum(!is.na(Flesch_Kincaid)),  
+    se_readability = sd_readability / sqrt(n),  
+    lower_ci = mean_readability - qt(0.975, df = n - 1) * se_readability,  
+    upper_ci = mean_readability + qt(0.975, df = n - 1) * se_readability  
+  )
+
+# Binding rows together
+benchmarking_readability_scores<-rbind(benchmarking_readability_scores,stats_comguides)
+
+# Creating graph
+figure_6<-ggplot(benchmarking_readability_scores, aes(x = reorder(text_type, mean_readability), y = mean_readability)) +
+  geom_point(size = 3, color = "#0072b2") + 
+  geom_errorbar(aes(ymin = lower_ci,ymax = upper_ci), width = 0.2) + 
+  ylab('Average Flesch-Kincaid Grade Score')+
+  xlab("")+
+  theme_bw(base_size = 14) +
+  coord_flip() 
+
+# Displaying graph
+figure_6
+
+# Removing unneccessary objects
+rm(benchmarking_readability_scores,stats_comguides)
 
 ## Figure 7 ####
 # Heatmap with banned categories
