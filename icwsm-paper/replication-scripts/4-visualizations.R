@@ -1,0 +1,583 @@
+## Figure 1 ####
+# This is just a visualization of our workflow
+
+## Figure 2 ####
+# Available content moderation links in COMPARE
+desired_order <- c("Transparency","Guidelines","Process", "Enforcement","Privacy","ToS")
+available_cm_links$info <- factor(available_cm_links$info, levels = desired_order)
+
+figure_2 <- ggplot(data = available_cm_links, aes(x = info, y = count, fill = URL)) +
+  geom_col(position = "stack", color = "white") +
+  theme_bw(base_size = 14) +
+  xlab("") +
+  ylab("") +
+  ggtitle("") +
+  coord_flip() +
+  geom_text(aes(label = count), position = position_stack(vjust = 0.5), colour="white") + 
+  scale_fill_manual(values = c("#808080", "#0072b2"))
+
+figure_2
+
+# Removing unnecessary objects
+rm(desired_order,available_cm_links)
+
+## Figure 3 ####
+# Availability of community guidelines by platform characteristics
+compare <- compare %>% 
+  mutate(comguide_true_str = recode(comguide_true, `0` = "no", `1` = "yes")) 
+  
+
+# Area
+comguide_area <- compare %>% 
+  group_by(area) %>% 
+  count(comguide_true_str)
+comguide_area$comguide_true_str <- as.factor(comguide_area$comguide_true_str)
+
+graph_cg_av_area <- ggplot(data = comguide_area, aes(x = area, y = n, fill = comguide_true_str)) +
+  geom_col(position = "stack", color = "white") +
+  theme_bw(base_size = 14) +
+  ggtitle("Geographical Area")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("") +
+  ylab("") +
+  geom_text(aes(label = ifelse(n < 5, "", n)), position = position_stack(vjust = 0.5), colour = "white",size=3) +
+  scale_fill_manual(values = c("#808080", "#0072b2")) +
+  labs(fill = "Community Guidelines Available") +
+  theme(text = element_text(size = 12),
+        legend.position = "bottom",
+        legend.direction = "horizontal",
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  coord_cartesian(ylim=c(0,65))
+
+# Size
+order <- c("very small", "small","medium","large","very large")
+compare$platform_size <- factor(compare$platform_size, levels = order)
+
+comguide_size <- compare %>%
+  group_by(platform_size) %>%
+  count(comguide_true_str)
+
+comguide_size$comguide_true_str <- as.factor(comguide_size$comguide_true_str)
+
+graph_cg_av_size <- ggplot(data = comguide_size, aes(x = platform_size, y = n, fill = comguide_true_str)) +
+  geom_col(position = "stack", color = "white") +
+  theme_bw(base_size = 14) +
+  ggtitle("Platform Size")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("") +
+  ylab("") +
+  geom_text(aes(label = ifelse(n < 5, "", n)), position = position_stack(vjust = 0.5), colour = "white",size=3) +
+  scale_fill_manual(values = c("#808080", "#0072b2")) +
+  labs(fill = "Community Guidelines Available") +
+  theme(text = element_text(size = 12),
+        legend.position = "bottom",
+        legend.direction = "horizontal",
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  coord_cartesian(ylim=c(0,65))
+
+# Year
+
+comguide_year <- compare %>%
+  mutate(year_bin = cut(year, breaks = 5, include.lowest = TRUE, right = FALSE)) %>%
+  group_by(year_bin) %>%
+  count(comguide_true_str) %>%
+  mutate(year_bin = as.factor(year_bin),
+         comguide_true_str = as.factor(comguide_true_str))
+
+levels(comguide_year$year_bin) <- gsub("\\[|\\]", "", levels(comguide_year$year_bin))
+levels(comguide_year$year_bin) <- gsub("\\(|\\)", "", levels(comguide_year$year_bin))
+levels(comguide_year$year_bin) <- gsub("\\,", "-", levels(comguide_year$year_bin))
+
+comguide_year <- comguide_year %>%
+  filter(!is.na(year_bin), !is.na(n))
+
+graph_cg_av_year_binned <- ggplot(data = comguide_year, aes(x = year_bin, y = n, fill = comguide_true_str)) +
+  geom_col(position = "stack", color = "white") +
+  theme_bw(base_size = 14) +
+  ggtitle("Platform Age")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("") +
+  ylab("") +
+  geom_text(aes(label = ifelse(n < 5, "", n)), position = position_stack(vjust = 0.5), colour = "white",size=3) +
+  scale_fill_manual(values = c("#808080", "#0072b2")) +
+  labs(fill = "Community Guidelines Available") +
+  theme(text = element_text(size = 12),
+        legend.position = "bottom",
+        legend.direction = "horizontal",
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  coord_cartesian(ylim=c(0,65))
+
+# Type
+
+comguide_type <- compare %>% 
+  group_by(type) %>% 
+  count(comguide_true_str)
+comguide_type$comguide_true_str <- as.factor(comguide_type$comguide_true_str)
+
+graph_cg_av_type <- ggplot(data = comguide_type, aes(x = type, y = n, fill = comguide_true_str)) +
+  geom_col(position = "stack", color = "white") +
+  theme_bw(base_size = 14) +
+  ggtitle("Platform Type")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("") +
+  ylab("") +
+  geom_text(aes(label = ifelse(n < 5, "", n)), position = position_stack(vjust = 0.5), colour = "white",size = 3) +
+  scale_fill_manual(values = c("#808080", "#0072b2")) +
+  labs(fill = "Community Guidelines Available") +
+  theme(text = element_text(size = 12),
+        legend.position = "bottom",
+        legend.direction = "horizontal",
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  coord_cartesian(ylim=c(0,65))
+
+# Combined plot
+figure_3 <- (graph_cg_av_area | graph_cg_av_size) /
+  (graph_cg_av_year_binned | graph_cg_av_type) +
+  plot_layout(guides = "collect") & 
+  theme(legend.position = "bottom")
+
+figure_3
+
+# Removing unnecessary objects
+rm(comguide_area,comguide_size,comguide_type,comguide_year,graph_cg_av_area,graph_cg_av_size,graph_cg_av_type,graph_cg_av_year_binned,order)
+
+## Figure 4 ####
+# Length by platform characteristics
+
+# Area
+graph_length_area <- ggplot(df, aes(y=tokens, x=area)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2",width=0.5 ) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Geographical Area")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Length") +
+  geom_hline(yintercept=mean(df$tokens), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,20000))
+
+# Size
+df$platform_size <- factor(df$platform_size, levels = c("very small", "small", "medium", "large", "very large"))
+
+graph_length_size <- ggplot(df, aes(y=tokens, x=platform_size)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2",width=0.5 ) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Platform Size")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Length") +
+  geom_hline(yintercept=mean(df$tokens), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,20000))
+
+# Age
+# Filter out platforms without year
+data_wo_NA<- df %>% 
+  filter(!is.na(tokens) & !is.na(year_bin))
+
+graph_length_age <- ggplot(data_wo_NA, aes(y=tokens, x=year_bin)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2", width=0.5) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Platform Age")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Length") +
+  geom_hline(yintercept=mean(df$tokens), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,20000))
+
+# Type
+graph_length_type<- ggplot(df, aes(y=tokens, x=type)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2", width=0.5) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Platform Type")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Length") +
+  geom_hline(yintercept=mean(df$tokens), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,20000))
+
+# Combined plots
+figure_4 <- (graph_length_area | graph_length_size) /
+  (graph_length_age |graph_length_type) +
+  plot_layout(guides = "collect")
+
+figure_4
+
+# Remove unnecessary objects
+rm(graph_length_area,graph_length_age,graph_length_size,graph_length_type)   
+
+## Figure 5 ####
+# Readability by platform characteristics
+
+# Area
+graph_readability_area <- ggplot(df, aes(y=Flesch_Kincaid, x=area)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2",width=0.5 ) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Geographical Area")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Flesch-Kincaid") +
+  geom_hline(yintercept=mean(df$Flesch_Kincaid), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,15))
+
+# Size
+graph_readability_size <- ggplot(df, aes(y=Flesch_Kincaid, x=platform_size)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2",width=0.5 ) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Platform Size")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Flesch-Kincaid") +
+  geom_hline(yintercept=mean(df$Flesch_Kincaid), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,15))
+
+# Age
+graph_readability_age<- ggplot(data_wo_NA, aes(y=Flesch_Kincaid, x=year_bin)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2", width=0.5) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Platform Age")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Flesch-Kincaid") +
+  geom_hline(yintercept=mean(df$Flesch_Kincaid), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,15))
+
+# Type
+graph_readability_type<- ggplot(df, aes(y=Flesch_Kincaid, x=type)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2", width=0.5) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Platform Type")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Flesch-Kincaid") +
+  geom_hline(yintercept=mean(df$Flesch_Kincaid), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,15))
+
+# Combined plots
+figure_5 <- (graph_readability_area | graph_readability_size) /
+  (graph_readability_age |graph_readability_type) +
+  plot_layout(guides = "collect")
+figure_5
+
+# Remove unnecessary objects
+rm(graph_readability_age,graph_readability_area,graph_readability_size,graph_readability_type)
+
+## Figure 6 ####
+# Benchmarking readability
+
+# make a decision how to handle Christian's data -> talk to Sebastian
+
+## Figure 7 ####
+# Heatmap with banned categories
+
+# Reading in data with all categories and platforms
+categories<-read.csv("../replication-data/banned_categories_all.csv")
+rownames(categories) <- categories$Category  
+categories$Category <- NULL  
+
+# Aggregating categories to groups
+category_map <- list(
+  Child_Sexual_Exploitation = c("Child Sexual Exploitation","Minors Sexualization","Child Nudity","Child Exploitation Imagery"),
+  Criminal_Behavior = c("Criminal Behavior", "Vandalism","Scams","Human Trafficking","Celebrating Own Crime","Theft"),
+  Depiction_of_Dangerous_Behavior_Risking_Imitation = c("Depiction of Dangerous Behavior Risking Imitation", "Dangerous Challenges", "Suicide Depiction","Self-injury Depiction","Incitement to Dangerous Behavior","Eating Disorder Depiction"),
+  Glorifying_Violent_Events = c("Glorifying Violent Groups/ Events", "Incitement to Violence","Terrorist Propaganda","Mass Murder Support","Hate Group Propaganda","Criminal Group Propaganda"),
+  Graphic_Violence = c("Graphic Violence","Sexual Violence","Violence against Humans","Child Abuse","Animal Abuse"),
+  Harassment = c("Harassment","Non-Consensual Intimate Imagery Threat", "Bullying", "Non-Consensual Sexual Touching","Repeated Unwanted Advances"),
+  Hate_Speech = c("Hate Speech","Slurs","Inferiority","Hateful Images and Symbols","Exclusion/Segregation","Dehumanization"),
+  Inauthentic_Behavior =c("Inauthentic Behavior","Fake Profiles","Spam","Engagement Abuse"),
+  Misinformation =c("Misinformation","Interference with Elections","Propagading Conspiracy Theories","Health Related Misinformation","Fake News","Denying well Documented Historical Events","Denying Climate Change"),
+  Nudity =c("Nudity","Adult Non-Sexual Nudity","Adult Non-Consensual Intimate Imagery"),
+  Intellectual_Property_Infringement =c("Intellectual Property Infringement"),
+  Political_Content =c("Political Content","Distorting Historical Narratives","Criticizing the Government/ Authorities","National Interests","National Unity","National Security"),
+  Privacy_Violations =c("Privacy Violations","Impersonation","Exposure of Personal Information"),
+  Platform_Security =c("Platform Security","Sharing Malicious Software","Interrupting Platform Services"),
+  Sexual_Content =c("Sexual Content","Sexually Explicit Language","Sexual Solicitation","Sexual Activity","Prostitution"),
+  Sale_of_Illegal_Goods =c("Sale of Illegal or Regulated Goods", "Pharmaceutical Sales", "Non-medical Drug Sale","Marijuana Sales","Live Animal Sale","Human Organ Sale","Firearm Sales","Endangered Species Sale",
+                           "Counterfeit Products or Documents Sale", "Alcohol and Tobacco Sale")
+)
+
+
+
+aggregated_categories <- data.frame(matrix(ncol = ncol(categories), nrow = length(category_map)))
+colnames(aggregated_categories) <- colnames(categories)
+rownames(aggregated_categories) <- names(category_map)
+
+for (category in names(category_map)) {
+  aggregated_categories[category, ] <- colSums(categories[category_map[[category]], , drop = FALSE])
+}
+
+aggregated_categories$X.1<- NULL
+
+# Removing weird x in names starting with a number
+colnames(aggregated_categories)[colnames(aggregated_categories) == "X4chan"] <- "4chan"
+colnames(aggregated_categories)[colnames(aggregated_categories) == "X6.cn"] <- "6.cn"
+colnames(aggregated_categories)[colnames(aggregated_categories) == "X8kun"] <- "8kun"
+colnames(aggregated_categories)[colnames(aggregated_categories) == "X9gag"] <- "9gag"
+
+# Remove dots from platforms names - necessary to avoid NAs
+colnames(aggregated_categories)[colnames(aggregated_categories) == "Sound.Cloud"] <- "Sound Cloud"
+colnames(aggregated_categories)[colnames(aggregated_categories) == "Hive.Social"] <- "Hive Social"
+colnames(aggregated_categories)[colnames(aggregated_categories) == "Steam.Community"] <- "Steam Community"
+colnames(aggregated_categories)[colnames(aggregated_categories) == "Stack.Exchange"] <- "Stack Exchange"
+colnames(aggregated_categories)[colnames(aggregated_categories) == "Hacker.News"] <- "Hacker News"
+
+#long format
+aggregated_categories_long <- aggregated_categories %>%
+  as_tibble(rownames = "Category") %>%  
+  pivot_longer(cols = -Category, names_to = "Platform", values_to = "Count")
+
+
+# Normalizing categories per group
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Child_Sexual_Exploitation"] <-  4
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Criminal_Behavior"] <-  6
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Depiction_of_Dangerous_Behavior_Risking_Imitation"] <-  6
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Glorifying_Violent_Events"] <-  6
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Graphic_Violence"] <-  5
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Harassment"] <-  5
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Hate_Speech"] <-  6
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Inauthentic_Behavior"] <-  4
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Misinformation"] <-  7
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Sale_of_Illegal_Goods"] <-  10
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Privacy_Violations"] <-  3
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Sexual_Content"] <-  5
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Nudity"] <-  3
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Platform_Security"] <-  3
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Intellectual_Property_Infringement"] <-  1
+aggregated_categories_long$categories_total[aggregated_categories_long$Category == "Political_Content"] <-  6
+
+aggregated_categories_long <- aggregated_categories_long %>%
+  mutate(normalized_count = Count / categories_total)
+
+# Renaming labels to lower case letters
+category_labels <- c(
+  "Child_Sexual_Exploitation" = "child sexual exploitation",
+  "Criminal_Behavior" = "criminal behavior",
+  "Depiction_of_Dangerous_Behavior_Risking_Imitation" = "dangerous behavior",
+  "Glorifying_Violent_Events" ="glorifying violent events",
+  "Graphic_Violence" = "graphic violence",
+  "Harassment" = "harassment",
+  "Hate_Speech" ="hate speech",
+  "Inauthentic_Behavior"= "inauthentic behavior",
+  "Misinformation"="misinformation",
+  "Nudity"="nudity",
+  "Intellectual_Property_Infringement" = "intellectual property infringement",
+  "Political_Content" ="political content",
+  "Privacy_Violations" ="privacy violations",
+  "Platform_Security" = "platform security",
+  "Sexual_Content"="sexual content",
+  "Sale_of_Illegal_Goods"="sale of illegal goods")
+
+# Determining order of categories
+category_order <- aggregated_categories_long %>%
+  group_by(Category) %>%
+  summarise(mean_normalized_count = mean(normalized_count, na.rm = TRUE)) %>%
+  arrange(mean_normalized_count) %>%
+  pull(Category)
+
+aggregated_categories_long$Category <- factor(aggregated_categories_long$Category, levels = category_order)
+
+
+
+# Determining order of platforms by frequency
+category_counts <- colSums(categories[, -1] > 0)  
+category_counts <- categories %>%
+  summarise(across(everything(), ~ sum(. > 0))) 
+
+platform_order <- category_counts %>%
+  pivot_longer(cols = everything(), names_to = "Platform", values_to = "NumberOfBannedCategories") %>%
+  arrange(desc(NumberOfBannedCategories)) %>%
+  pull(Platform)
+
+platform_order[platform_order == "X4chan"] <- "4chan"
+platform_order[platform_order == "X6.cn"] <- "6.cn"
+platform_order[platform_order == "X8kun"] <- "8kun"
+platform_order[platform_order == "X9gag"] <- "9gag"
+platform_order[platform_order == "Sound.Cloud"] <- "Sound Cloud"
+platform_order[platform_order == "Hive.Social"] <- "Hive Social"
+platform_order[platform_order == "Steam.Community"] <- "Steam Community"
+platform_order[platform_order == "Stack.Exchange"] <- "Stack Exchange"
+platform_order[platform_order == "Hacker.News"] <- "Hacker News"
+
+#Remove X.1 column
+platform_order <- platform_order[-1]
+
+aggregated_categories_long$Platform <- factor(aggregated_categories_long$Platform, levels = platform_order)
+
+figure_7 <- ggplot(aggregated_categories_long, aes(x = Platform, y = Category, fill = normalized_count)) +
+  geom_tile() +
+  theme_bw() +
+  theme(legend.position = "none") +
+  scale_fill_gradient(low = "white", high = "#0072b2") +
+  theme(axis.text.x = element_text(angle = 45, 
+                                   hjust = 1)) +
+  scale_y_discrete(labels = category_labels) 
+figure_7
+
+# Removing unnecessary objects
+rm(aggregated_categories,aggregated_categories_long,categories,
+   category_counts,category_map,category,category_labels,
+   category_order,platform_order)
+
+## Figure 8 ####
+# Semantic complexity by platform characteristics
+
+# Area
+graph_categories_area <- ggplot(df, aes(y=banned_categories, x=area)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2",width=0.5 ) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Geographical Area")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Semantic Complexity") +
+  geom_hline(yintercept=mean(df$banned_categories), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,65))
+
+# Size
+graph_categories_size <- ggplot(df, aes(y=banned_categories, x=platform_size)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2",width=0.5 ) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Platform Size")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Semantic Complexity") +
+  geom_hline(yintercept=mean(df$banned_categories), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,65))
+
+# Age
+graph_categories_age<- ggplot(data_wo_NA, aes(y=banned_categories, x=year_bin)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2", width=0.5) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Platform Age")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Semantic Complexity") +
+  geom_hline(yintercept=mean(df$banned_categories), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,65))
+
+# Type
+graph_categories_type<- ggplot(df, aes(y=banned_categories, x=type)) +
+  geom_bar(stat="summary", fun.y=mean, fill="#0072b2", width=0.5) +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2, color="black") +
+  theme_bw() +
+  ggtitle("Platform Type")+
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  xlab("") +
+  ylab("Semantic Complexity") +
+  geom_hline(yintercept=mean(df$banned_categories), color='#808080', size=0.8,linetype="dashed")+
+  coord_cartesian(ylim=c(0,65))
+
+# Combined plots
+figure_8 <- (graph_categories_area | graph_categories_size) /
+  (graph_categories_age |graph_categories_type) +
+  plot_layout(guides = "collect")
+figure_8
+
+# Remove unnecessary objects
+rm(graph_categories_age,graph_categories_area,graph_categories_size,graph_categories_type,data_wo_NA)
+
+## Figure 9 ####
+# Scatterplots
+
+# Choosing platforms to be displayed with name  
+platform_selection = c("Patriots.win","Mastodon","Plurk","Slug","Xing","YouTube","Facebook","X",
+                       "Snapchat","Pinterest","LinkedIn","TikTok","Douyin","Discord","Twitch",
+                       "WeChat","Aparat","Foursquare","4chan","Hacker News","SlideShare","Kuaishou",
+                       "Imo","Gettr","Flickr","WhatsApp","Reddit","Letterboxd","Bluesky","Truth Social", "Tumblr")#LINE/QUORA
+
+
+# Scatterplot length x readability
+graph_scatterplot_len_read<-ggplot(df, aes(x=log_tokens, y=Flesch_Kincaid,label=platform))+
+  geom_point(color = "#0072b2",fill="#0072b2",size=1.5, position = 'jitter')+
+  geom_smooth(method = lm, color="black",size=0.3)+
+  theme_bw(base_size = 14)+
+  xlab('Length')+
+  ylab('Flesch-Kincaid')+
+  geom_text_repel(data = df %>%
+                  filter(platform %in% platform_selection),
+                  aes(label=platform),
+                  size=3,
+                  color='black')+
+  annotate("text", x = 2.6, y = 17.5,
+           label = bquote(bold("r = ") * bold(.(round(cor_len_read, 2)))), 
+           size = 3, color = "black")+
+  theme(
+    axis.title.x = element_text(size = 10), 
+    axis.title.y = element_text(size = 10)  
+  )
+
+# Scatterplot length x semantic complexity
+filtered_data1 <- df %>%
+  filter (platform %in% platform_selection)
+
+graph_scatterplot_len_cat <- ggplot(df, aes(x = log_tokens, y = banned_categories, label = platform)) +
+  geom_point(color = "#0072b2", fill = "#0072b2", size = 1.5, position = 'jitter') +
+  geom_smooth(method = lm, color = "black", size = 0.3) +
+  theme_bw(base_size = 14) +
+  xlab('Length') +
+  ylab('Semantic Complexity') +
+  geom_text_repel(data = filtered_data1, aes(label = platform), size = 3, color = 'black')+
+  annotate("text", x = 2.6, y = 69,
+           label = bquote(bold("r = ") * bold(.(round(cor_len_cat, 2)))), 
+           size = 3, color = "black")+
+  theme(
+    axis.title.x = element_text(size = 10), 
+    axis.title.y = element_text(size = 10)  
+  )
+
+# Scatterplot readability x semantic complexity
+filtered_data2 <- df %>%
+  filter(platform %in% platform_selection)
+
+graph_scatterplot_read_cat <- ggplot(df, aes(x = Flesch_Kincaid, y = banned_categories, label = platform)) +
+  geom_point(color = "#0072b2", fill = "#0072b2", size = 1.5, position = 'jitter') +
+  geom_smooth(method = lm, color = "black", size = 0.3) +
+  theme_bw(base_size = 14) +
+  xlab('Flesch-Kincaid') +
+  ylab('Semantic Complexity') +
+  geom_text_repel(data = filtered_data2, aes(label = platform), size = 3.4, color = 'black')+
+  annotate("text", x = 7, y = 69,
+           label = bquote(bold("r = ") * bold(.(round(cor_read_cat, 2)))), 
+           size = 3, color = "black")+
+  theme(
+    axis.title.x = element_text(size = 10), 
+    axis.title.y = element_text(size = 10)  
+  )
+
+# Combined plots
+figure_9 <- ( graph_scatterplot_len_cat | graph_scatterplot_read_cat | graph_scatterplot_len_read )  +
+  plot_layout(guides = "collect") & 
+  theme(legend.position = "bottom")
+figure_9
+
+# Remove unnecessary objects
+rm(graph_scatterplot_len_cat,graph_scatterplot_len_read,graph_scatterplot_read_cat, 
+   platform_selection,cor_len_cat,cor_len_read,cor_read_cat,
+   filtered_data1,filtered_data2)
+
+## Figure 10 ####
+# Evolution of community guidelines
+
+# talk to Sebastian about pga-versions
+
+

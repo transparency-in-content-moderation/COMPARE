@@ -230,11 +230,5 @@ text_df$text <- sapply(text_df$text, text_cleaning_markdown)
 text_df$text <- sapply(text_df$text, text_cleaning_remaining_markdown)
 
 
-# LINE removing duplicated passages
-split_LINE <-strsplit(text_df$text, split = "\\.\\s+")[[3]]
-unique_LINE <- unique(split_LINE)
-cleaned_LINE <- paste(unique_LINE, collapse = ". ")
-text_df$text[3]<-cleaned_LINE
-
-rm(split_LINE,unique_LINE,cleaned_LINE,text_cleaning_markdown,text_cleaning_remaining_markdown)
+rm(text_cleaning_markdown,text_cleaning_remaining_markdown)
 

@@ -21,16 +21,15 @@ df <- length %>%
   inner_join(readability,by="document")
 
 # Changing column names
-colnames(df)<-c("platform","tokens","Flesch-Kincaid")
+colnames(df)<-c("platform","tokens","Flesch_Kincaid")
 
 ## 2. Importing datasets ####
 
 # COMPARE
 compare <-read.csv("../../data/COMPARE.csv")
-compare <- compare %>%
+compare_com_guides <- compare %>%
   filter(comguide_true ==1) %>% 
   select(name,countrycode,monvisit,year,decentralized,alt_tech,type)
-
 
 # Banned categories coding
 categories <-read.csv("../replication-data/banned_categories.csv")
@@ -38,20 +37,21 @@ categories <- categories %>%
   select(platform,banned_categories)
 
 
-## 3. Creating final dataset
+## 3. Creating final dataset ####
 
 # Removing remaining white spaces to avoid problems
 df$platform <- trimws(df$platform)
+compare_com_guides$name <- trimws(compare_com_guides$name)
 compare$name <- trimws(compare$name)
 categories$platform <- trimws(categories$platform)
 
 # Merging datasets
 df <-df %>%
-  inner_join(compare, by = c("platform" ="name")) %>%
+  inner_join(compare_com_guides, by = c("platform" ="name")) %>%
   inner_join(categories, by = "platform") 
 
 # Removing unnecessary objects
-rm(length,readability,text_df,categories,corpus,compare)
+rm(length,readability,text_df,categories,corpus,compare_com_guides)
 
 ## 4. Data preparation ####
 
@@ -78,4 +78,16 @@ levels(df$year_bin) <- gsub("\\[|\\]", "", levels(df$year_bin))
 levels(df$year_bin) <- gsub("\\(|\\)", "", levels(df$year_bin))
 levels(df$year_bin) <- gsub("\\,", "-", levels(df$year_bin))
 
+# Recoding area for COMPARE as well
+compare$area[compare$countrycode == "USA"]<- "USA"
+compare$area[compare$countrycode == "CHN"]<- "China"
+compare$area[compare$countrycode == "DEU" |compare$countrycode == "FRA" | compare$countrycode == "POL" | compare$countrycode == "LVA" | compare$countrycode == "LUX"] <- "EU"
+compare$area[is.na(compare$area)]<- "Other"
 
+# Recoding size for COMPARE as well
+compare$platform_size<-NA
+compare$platform_size[compare$monvisit>=800000000]<-"very large"
+compare$platform_size[compare$monvisit>=100000000 & compare$monvisit <800000000]<-"large"
+compare$platform_size[compare$monvisit>=1000000 & compare$monvisit <100000000]<-"medium"
+compare$platform_size[compare$monvisit>=100000 & compare$monvisit <1000000]<-"small"
+compare$platform_size[compare$monvisit<100000]<-"very small"
