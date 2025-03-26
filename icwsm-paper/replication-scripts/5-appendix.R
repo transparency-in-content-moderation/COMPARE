@@ -5,8 +5,7 @@
 log_model <- glm(comguide_true ~  area + log(monvisit) + year + type + decentralized +alt_tech, data = compare, family = "binomial")
 summary(log_model)
 
-### 1.2 Multivariate Regressions ####
-
+### 1.2 OLS Regressions ####
 model_length<-lm(log(tokens) ~ area + log(monvisit) + year + type + decentralized +alt_tech ,data=df , na.action = na.omit)
 model_complexity<-lm(Flesch_Kincaid ~  area + log(monvisit) + year + type + decentralized +alt_tech ,data=df , na.action = na.omit)
 model_categories<-lm(banned_categories~  area + log(monvisit) + year + type + decentralized +alt_tech ,data=df , na.action = na.omit)
