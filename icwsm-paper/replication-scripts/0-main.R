@@ -6,6 +6,7 @@ required <- c("readtext", "tidyverse", "commonmark", "quanteda","quanteda.textst
 new_packages <- required[!(required %in% installed.packages()[, "Package"])]
 if (length(new_packages)) install.packages(new_packages)
 
+
 library(readtext) # version 0.91
 library(tidyverse) # version 2.0.0
 library(commonmark) # version 1.9.1
@@ -16,6 +17,7 @@ library(ggrepel) # version 0.9.5
 library(here) # version 1.0.1
 
 # Setting working directory
+setwd("~/Documents/TCM/COMPARE/github/COMPARE/icwsm-paper/replication-scripts")
 setwd(here("icwsm-paper/replication-scripts"))
 
 source("1-text-preparation.R")
@@ -30,3 +32,6 @@ source("4-visualizations.R")
 #- Chinese metrics are calculated in a python script, 
 # -translation_comparison.R
 # robustness_tests_reviews
+
+# Removing uneccesary objects
+rm (required, new_packages)
