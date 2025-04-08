@@ -51,7 +51,7 @@ df <-df %>%
   inner_join(categories, by = "platform") 
 
 # Removing unnecessary objects
-rm(length,readability,text_df,categories,corpus,compare_com_guides)
+rm(length,readability,categories,compare_com_guides)
 
 ## 4. Data preparation ####
 

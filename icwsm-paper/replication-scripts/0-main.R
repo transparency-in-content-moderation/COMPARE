@@ -14,11 +14,13 @@ library(quanteda) # version 4.0.2
 library(quanteda.textstats) # version 0.97
 library(patchwork) # version 1.2.0
 library(ggrepel) # version 0.9.5
-library(here) # version 1.0.1
+library(gridExtra) # version 2.3
 
-# Setting working directory
-setwd("~/Documents/TCM/COMPARE/github/COMPARE/icwsm-paper/replication-scripts")
-setwd(here("icwsm-paper/replication-scripts"))
+# Removing unnecessary objects
+rm (required, new_packages)
+
+# Setting working directory - please adjust your path
+#setwd("~/ADJUST-PATH-HERE/COMPARE/icwsm-paper/replication-scripts")
 
 source("1-text-preparation.R")
 
@@ -28,10 +30,5 @@ source("3-analyses.R")
 
 source("4-visualizations.R") 
 
-#source("5-appendix.R") 
-#- Chinese metrics are calculated in a python script, 
-# -translation_comparison.R
-# robustness_tests_reviews
+source("5-appendix.R") 
 
-# Removing uneccesary objects
-rm (required, new_packages)

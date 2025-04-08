@@ -120,7 +120,7 @@ exclude_platforms <- c('Parler', 'Spotify', 'Twitter', 'WeChat', 'Instagram')
 text_df <- process_text_files(data_dir, data_dir2, exclude_platforms)
 
 # Removing unnecessary files
-rm(data_dir,data_dir2,exclude_platforms,import_COMPARE_texts,import_PGA_texts,combine_text,process_text_files)
+rm(data_dir,data_dir2,exclude_platforms,import_COMPARE_texts,combine_text,process_text_files)
 
 ## 2. Text Cleaning ####
 
@@ -230,5 +230,4 @@ text_df$text <- sapply(text_df$text, text_cleaning_markdown)
 text_df$text <- sapply(text_df$text, text_cleaning_remaining_markdown)
 
 
-rm(text_cleaning_markdown,text_cleaning_remaining_markdown)
 
