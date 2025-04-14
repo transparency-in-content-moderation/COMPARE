@@ -130,29 +130,29 @@ text_cleaning_markdown <-function(md) {
   text<- markdown_text(md,width=100000)
   
   # Replaces strange white spaces
-  text <-gsub("[\u00a0 ]+\n", "\n", text)
-  text <-gsub("\u200D","",text)
+  text <- gsub("[\u00a0 ]+\n", "\n", text)
+  text <- gsub("\u200D","",text)
   
   # Removes -
-  text <-gsub("  - "," ",text)
+  text <- gsub("  - "," ",text)
   
   # Replace with \n with dot if not precedented by .?!\n
-  text <-gsub("(?<![.?!\n])\n+", ". ", text, perl = T)
-  text <-gsub("\n+", " ", text,perl = T)
+  text <- gsub("(?<![.?!\n])\n+", ". ", text, perl = T)
+  text <- gsub("\n+", " ", text,perl = T)
   
   # Remove two or more whitespaces
-  text <-gsub("\\s{2,}"," ",text)
+  text <- gsub("\\s{2,}"," ",text)
   # Removing YouTube crisis Phone Numbers: 
-  text <-gsub("\\|\\s\\|.+\\|\\.", ".", text)
+  text <- gsub("\\|\\s\\|.+\\|\\.", ".", text)
   
   # Google Translation signs (Aparat & Ninisite) 
-  text <-gsub("#39;", "'",text)
+  text <- gsub("#39;", "'",text)
   
   # Remaining links (8kun)
-  text <-gsub("https?://\\S+", "", text)
+  text <- gsub("https?://\\S+", "", text)
   
   # Remove special dot ·
-  text <-gsub("·", "", text)
+  text <- gsub("·", "", text)
   
   # Dxy: strange numbers (①)
   text <- gsub("① *","1\\. ", text) 
@@ -191,10 +191,10 @@ text_cleaning_markdown <-function(md) {
   text <- gsub("(.) ([a-z]{1,2})\\)", "\\1. \\2.", text)
   
   # Punctuation
-  text <-gsub("\\.{2,}", "\\.",text)
-  text <-gsub("\\.\\s+\\.", "\\.",text)
+  text <- gsub("\\.{2,}", "\\.",text)
+  text <- gsub("\\.\\s+\\.", "\\.",text)
   text <- gsub("\\:\\.",": ", text)
-  text <-gsub("\\:\\s+\\.", "\\: ",text)
+  text <- gsub("\\:\\s+\\.", "\\: ",text)
   text <- gsub("\\?\\.", "?", text)
   text <- gsub("\\!\\.", "!", text)
   text <- gsub("●","",text)
@@ -212,12 +212,12 @@ text_cleaning_markdown <-function(md) {
 
 ### 2.2 Function to remove remaining markdown signs ####
 text_cleaning_remaining_markdown <-function(text) { 
-  text <-gsub("-{2,}", "",text)
-  text <-gsub("\\*+"," ",text)
-  text <-gsub("\\#+"," ",text)
-  text <gsub("=+","",text)
+  text <- gsub("-{2,}", "",text)
+  text <- gsub("\\*+"," ",text)
+  text <- gsub("\\#+"," ",text)
+  text <- gsub("=+","",text)
   text <- gsub("\\.\\s+\\.",".",text)
-  text <-gsub ("\\s{2,}","",text) 
+  text <- gsub("\\s{2,}","",text)
   return(text)
 }
 

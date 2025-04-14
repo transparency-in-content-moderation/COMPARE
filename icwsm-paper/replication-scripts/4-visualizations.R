@@ -20,7 +20,7 @@ figure_2 <- ggplot(data = available_cm_links, aes(x = info, y = count, fill = UR
   scale_fill_manual(values = c("#808080", "#0072b2"))
 
 # Displaying graph
-figure_2)\
+figure_2
 
 # Removing unnecessary objects
 rm(desired_order,available_cm_links)
