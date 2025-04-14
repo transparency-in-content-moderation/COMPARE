@@ -679,6 +679,13 @@ rm(graph_scatterplot_len_cat,graph_scatterplot_len_read,graph_scatterplot_read_c
 # and unrolled in the project pga-versions-unrolled
 df_evolution <- read.csv("../replication-data/pga-versions-unrolled/data/pga-versions-community-guidelines.csv")
 
+df_evolution$date <- as.Date(df_evolution$date)
+
+# Cleaning text
+df_evolution$text <- sapply(df_evolution$text, text_cleaning_markdown)
+df_evolution$text <- sapply(df_evolution$text, text_cleaning_remaining_markdown)
+
+# Text length in tokens
 df_evolution$tokens <- sapply(df_evolution$text, ntoken)
 
 # Calculating readability
@@ -692,10 +699,13 @@ version_scores <- df_evolution %>%
   drop_na()
 
 # Remove outlier due to technical error
-version_scores <-version_scores %>%  filter(!(platform == "Facebook" & date == "2019-03-20"))
+version_scores <- version_scores %>%  filter(!(platform == "Facebook" & date == "2019-03-20"))
 
+# Remove platforms out of scope
+version_scores <- version_scores %>%  filter(platform %in% c("Facebook", "Instagram", "LINE", "LinkedIn", "Pinterest", "Quora", "Reddit", "Snapchat", "TikTok", "Twitch", "Twitter", "X", "YouTube", "Bluesky", "TruthSocial"))
 # Remove Instagram
-version_scores <-version_scores %>%  filter(!(platform == "Instagram"))
+version_scores <- version_scores %>%  filter(!(platform == "Instagram"))
+
 
 # Splitting data into two data frames
 pga_old <- version_scores %>%
@@ -791,3 +801,9 @@ figure_10 <- (graph_versions_old_tokens | graph_versions_new_tokens ) /
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
 figure_10
+
+# Removing unnecessary objects
+rm(df_evolution, corpus_evolution, readability_scores_evolution,
+   version_scores, pga_old, pga_new, colors_old, colors_new,
+   graph_versions_old_tokens, graph_versions_new_tokens,
+   graph_versions_old_readability, graph_versions_new_readability)
