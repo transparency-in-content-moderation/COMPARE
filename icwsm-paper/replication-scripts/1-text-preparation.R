@@ -215,7 +215,7 @@ text_cleaning_remaining_markdown <-function(text) {
   text <-gsub("-{2,}", "",text)
   text <-gsub("\\*+"," ",text)
   text <-gsub("\\#+"," ",text)
-  text <gsub("=+","",text)
+  text <- gsub("=+","",text)
   text <- gsub("\\.\\s+\\.",".",text)
   text <-gsub ("\\s{2,}","",text) 
   return(text)
