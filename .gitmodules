@@ -1,3 +1,6 @@
 [submodule "data/pga-versions"]
 	path = data/pga-versions
 	url = https://github.com/OpenTermsArchive/pga-versions.git
+[submodule "icwsm-paper/replication-data/pga-versions-unrolled"]
+	path = icwsm-paper/replication-data/pga-versions-unrolled
+	url = https://github.com/transparency-in-content-moderation/pga-versions-unrolled.git

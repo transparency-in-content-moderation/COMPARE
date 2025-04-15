@@ -1,6 +1,6 @@
 # Installing and loading packages
-required <- c("readtext", "tidyverse", "commonmark", "quanteda","quanteda.textstats",
-              "patchwork", "ggrepel", "here")  
+required <- c("readtext", "tidyverse", "commonmark", "quanteda", "quanteda.textstats",
+              "patchwork", "ggrepel", "here")
 
 # Check if packages are already installed, and install if missing
 new_packages <- required[!(required %in% installed.packages()[, "Package"])]

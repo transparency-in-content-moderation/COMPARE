@@ -675,172 +675,135 @@ rm(graph_scatterplot_len_cat,graph_scatterplot_len_read,graph_scatterplot_read_c
 ## Figure 10 ####
 # Evolution of community guidelines
 
-# Reading in data from PGA-versions
-# ADJUST HERE
-# data_dir <- "../replication-data/pga-versions-history"
-# 
-# versions <- list.files(data_dir, full.names = TRUE, recursive = TRUE) %>%  
-#   unlist()
-# 
-# platform  <- versions %>%  
-#   dirname() %>%  
-#   basename()
-# 
-# timestamp <- versions %>%  
-#   basename() %>%  
-#   lapply(function(p) unlist(strsplit(p, "_"))[1]) %>%  
-#   unlist()
-# 
-# content   <- versions %>%  
-#   lapply(read_file) %>%  
-#   unlist()
-# 
-# # Convert timestamp string to date
-# df_evolution <- data.frame(platform, timestamp, content)
-# 
-# # Convert timestamps into unique format
-# df_evolution$timestamp <- gsub("^([0-9]{8})$", "\\1T000000", df_evolution$timestamp)
-# df_evolution$date      <- as.Date(df_evolution$timestamp, format="%Y%m%dT%H%M%S")
-# 
-# # Cleaning text
-# source("text_cleaning_function.R")
-# 
-# df_evolution$text <- sapply(df_evolution$content, text_cleaning_markdown)
-# df_evolution$text <- sapply(df_evolution$text, text_cleaning_remaining_markdown)
-# 
-# # Calculating length and digest
-# df_evolution$tokens <- sapply(df_evolution$text, ntoken)
-# df_evolution$digest_text    <- sapply(df_evolution$text, digest, algo='md5')
-# 
-# # Mark versions which are an update of the previous version
-# # - duplicated text digests indicate "not updated" (no change)
-# # - because versions are sorted by platform and (secondary) by time,
-# #   the first (oldest) version of all duplicates is "kept" as "updated"
-# df_evolution$updated <- !duplicated(df_evolution$digest_text)
-# 
-# # Check how many updated versions there are per platform
-# print("Updated guidelines by platform (updated = text version has changed)")
-# xtabs(~ platform + updated, data = df_evolution)
-# 
-# # Print all rows to be discarded as "not updated"
-# df_evolution[!df_evolution$updated,] %>%  subset(select = -c(content, text))
-# 
-# # Keeping only data points which are updates
-# df_evolution <- df_evolution[df_evolution$updated,]
-# 
-# # Calculating readability
-# corpus_evolution <- corpus(df_evolution,text_field = "text" ) 
-# readability_scores_evolution <- textstat_readability(corpus, measure = "Flesch.Kincaid", remove_hyphens = TRUE, intermediate = FALSE)
-# df_evolution$Flesch_Kincaid<- readability_scores_evolution$Flesch.Kincaid
-# 
-# # Creating a data frame 
-# version_scores <-df_evolution %>% 
-#   select(platform,date,tokens,Flesch_Kincaid) %>% 
-#   drop_na() 
-# 
-# # Remove outlier due to technical error
-# version_scores <-version_scores %>%  filter(!(platform == "Facebook" & date == "2019-03-20"))
-# 
-# # Remove Instagram
-# version_scores <-version_scores %>%  filter(!(platform == "Instagram"))
-# 
-# # Splitting data into two data frames
-# pga_old <- version_scores %>%  
-#   filter(date <= as.Date("2021-12-24"))
-# 
-# pga_new <- version_scores %>%  
-#   filter(date >= as.Date("2022-04-20"))
-# 
-# # Creating Graphs
-# 
-# # Length
-# options(repr.plot.width=18, repr.plot.height=6)
-# colors_old <- c("Facebook" = "#0081FB", "Instagram" = "#C13584", "X" = "#000000")
-# 
-# 
-# graph_versions_old_tokens<-ggplot(pga_old, aes(x = date, y = tokens, color = platform)) + 
-#   theme_bw()+
-#   scale_color_manual(values = colors_old)+
-#   xlab(NULL) +
-#   ylab("Length")+
-#   labs(color = "Platform Name") +
-#   geom_vline(xintercept=as.Date("2015-03-24"),color='#808080',size=0.8)+ # Manila Principles
-#   geom_vline(xintercept=as.Date("2018-05-07"),color='#808080',size=0.8)+ # SCP 1.0
-#   geom_vline(xintercept=as.Date("2021-11-25"),color='#808080',size=0.8)+ # DSA Council Opinion
-#   scale_x_date(date_breaks = "1 year", date_labels = "%Y")+
-#   geom_point(size=1) + 
-#   geom_line(size=0.5) +
-#   coord_cartesian(ylim=c(0,30000))+
-#   theme(legend.position = "none",
-#         axis.text.x = element_text(angle = 45, hjust = 1))
-# 
-# 
-# colors_new <- c("Facebook" = "#0081FB", "Instagram" = "#C13584", 
-#             "X" = "#000000","LINE"=	"#21B94E","LinkedIn"="#0077B5",
-#             "Pinterest"="#FFC0CB" , "Quora"="#800000","Reddit"="#FF5700",
-#             "Snapchat"= "#FFFC00", "YouTube"="#FF0000","Bluesky"="#50B8E2",
-#             "TruthSocial"="#5448EE", "Twitch"="#6441a5","TikTok"="#00f2ea")
-# 
-# graph_versions_new_tokens<-ggplot(pga_new, aes(x = date, y = tokens, color = platform)) + 
-#   theme_bw()+
-#   scale_color_manual(values = colors_new)+
-#   xlab(NULL) +
-#   ylab("Length")+
-#   labs(color = "Platform Name") +
-#   geom_vline(xintercept=as.Date("2023-08-25"),color='#808080',size=0.8)+ # DSA entering into force
-#   scale_x_date(date_breaks = "3 months", date_labels = "%b %Y")+
-#   geom_point(size=1) + 
-#   geom_line(size=0.5) +
-#   coord_cartesian(ylim=c(0,30000))+
-#   theme(legend.position = "none",
-#         axis.text.x = element_text(angle = 45, hjust = 1))+
-#   scale_y_continuous(name = "Length", position = "right")
-# 
-# # Readability
-# graph_versions_old_readability<-ggplot(pga_old, aes(x = date, y = Flesch_Kincaid, color = platform)) + 
-#   theme_bw()+
-#   scale_color_manual(values = colors_old)+
-#   xlab(NULL) +
-#   ylab("Flesch-Kincaid")+
-#   labs(color = "Platform Name")+
-#   geom_vline(xintercept=as.Date("2015-03-24"),color='#808080',size=0.8)+ # Manila Principles
-#   geom_vline(xintercept=as.Date("2018-05-07"),color='#808080',size=0.8)+ # SCP 1.0
-#   geom_vline(xintercept=as.Date("2021-11-25"),color='#808080',size=0.8)+ # DSA Council Opinion
-#   annotate("text",x=as.Date("2014-01-08"), y=14, label="Manila \n Principles",color="#808080")+
-#   annotate("text",x=as.Date("2016-11-07"), y=14, label="SCP 1.0",color="#808080")+
-#   annotate("text",x=as.Date("2020-7-15"), y=14, label="Council \n Opinion \n on DSA ",color="#808080")+
-#   scale_x_date(date_breaks = "1 year", date_labels = "%Y")+
-#   geom_point(size=1) + 
-#   geom_line(size=0.5) +
-#   theme(legend.position = "none",
-#         axis.text.x = element_text(angle = 45, hjust = 1))+
-#   coord_cartesian(ylim=c(8,16))
-# 
-# graph_versions_new_readability<-ggplot(pga_new, aes(x = date, y = Flesch_Kincaid, color = platform)) + 
-#   theme_bw()+
-#   scale_color_manual(values = colors_new)+
-#   xlab(NULL) +
-#   ylab("Flesch-Kincaid")+
-#   labs(color = "Platform Name")+
-#   geom_vline(xintercept=as.Date("2023-08-25"),color='#808080',size=0.8)+ # DSA entering into force
-#   annotate("text",x=as.Date("2023-05-10"), y=9, label="DSA entering \n into force",color="#808080")+
-#   scale_x_date(date_breaks = "3 months", date_labels = "%b %Y")+
-#   geom_point(size=1) + 
-#   geom_line(size=0.5) +
-#   theme(legend.position="bottom",
-#         axis.text.x = element_text(angle = 45, hjust = 1))+
-#   coord_cartesian(ylim=c(8,16)) +
-#   scale_y_continuous(name = "Flesch-Kincaid", position = "right")
-# 
-# # Grouping Graphs
-# figure_10 <- (graph_versions_old_tokens | graph_versions_new_tokens ) /
-#   (graph_versions_old_readability | graph_versions_new_readability) +
-#   plot_layout(guides = "collect") & 
-#   theme(legend.position = "bottom") 
-# figure_10
-# 
-# # Removing unnecessary objects
-# rm(data_dir,versions, platform, timestamp, content,
-#    df_evolution, corpus_evolution,readability_scores_evolution,version_scores,pga_old,pga_new,
-#    colors_old,colors_new,graph_versions_old_tokens,graph_versions_new_tokens,graph_versions_old_readability,
-#    graph_versions_new_readability)
+# read history of community guidelines versions archived in PGA-Versions
+# and unrolled in the project pga-versions-unrolled
+df_evolution <- read.csv("../replication-data/pga-versions-unrolled/data/pga-versions-community-guidelines.csv")
+
+df_evolution$date <- as.Date(df_evolution$date)
+
+# Cleaning text
+df_evolution$text <- sapply(df_evolution$text, text_cleaning_markdown)
+df_evolution$text <- sapply(df_evolution$text, text_cleaning_remaining_markdown)
+
+# Text length in tokens
+df_evolution$tokens <- sapply(df_evolution$text, ntoken)
+
+# Calculating readability
+corpus_evolution <- corpus(df_evolution,text_field = "text" )
+readability_scores_evolution <- textstat_readability(corpus_evolution, measure = "Flesch.Kincaid", remove_hyphens = TRUE, intermediate = FALSE)
+df_evolution$Flesch_Kincaid <- readability_scores_evolution$Flesch.Kincaid
+
+# Creating a data frame
+version_scores <- df_evolution %>%
+  select(platform,date,tokens,Flesch_Kincaid) %>%
+  drop_na()
+
+# Remove outlier due to technical error
+version_scores <- version_scores %>%  filter(!(platform == "Facebook" & date == "2019-03-20"))
+
+# Remove platforms out of scope
+version_scores <- version_scores %>%  filter(platform %in% c("Facebook", "Instagram", "LINE", "LinkedIn", "Pinterest", "Quora", "Reddit", "Snapchat", "TikTok", "Twitch", "Twitter", "X", "YouTube", "Bluesky", "TruthSocial"))
+# Remove Instagram
+version_scores <- version_scores %>%  filter(!(platform == "Instagram"))
+
+
+# Splitting data into two data frames
+pga_old <- version_scores %>%
+  filter(date <= as.Date("2021-12-24"))
+
+pga_new <- version_scores %>%
+  filter(date >= as.Date("2022-04-20"))
+
+# Creating Graphs
+
+# Length
+options(repr.plot.width=18, repr.plot.height=6)
+colors_old <- c("Facebook" = "#0081FB", "Instagram" = "#C13584", "X" = "#000000")
+
+
+graph_versions_old_tokens<-ggplot(pga_old, aes(x = date, y = tokens, color = platform)) +
+  theme_bw()+
+  scale_color_manual(values = colors_old)+
+  xlab(NULL) +
+  ylab("Length")+
+  labs(color = "Platform Name") +
+  geom_vline(xintercept=as.Date("2015-03-24"),color='#808080',size=0.8)+ # Manila Principles
+  geom_vline(xintercept=as.Date("2018-05-07"),color='#808080',size=0.8)+ # SCP 1.0
+  geom_vline(xintercept=as.Date("2021-11-25"),color='#808080',size=0.8)+ # DSA Council Opinion
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y")+
+  geom_point(size=1) +
+  geom_line(size=0.5) +
+  coord_cartesian(ylim=c(0,30000))+
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+colors_new <- c("Facebook" = "#0081FB", "Instagram" = "#C13584",
+            "X" = "#000000","LINE"=	"#21B94E","LinkedIn"="#0077B5",
+            "Pinterest"="#FFC0CB" , "Quora"="#800000","Reddit"="#FF5700",
+            "Snapchat"= "#FFFC00", "YouTube"="#FF0000","Bluesky"="#50B8E2",
+            "TruthSocial"="#5448EE", "Twitch"="#6441a5","TikTok"="#00f2ea")
+
+graph_versions_new_tokens<-ggplot(pga_new, aes(x = date, y = tokens, color = platform)) +
+  theme_bw()+
+  scale_color_manual(values = colors_new)+
+  xlab(NULL) +
+  ylab("Length")+
+  labs(color = "Platform Name") +
+  geom_vline(xintercept=as.Date("2023-08-25"),color='#808080',size=0.8)+ # DSA entering into force
+  scale_x_date(date_breaks = "3 months", date_labels = "%b %Y")+
+  geom_point(size=1) +
+  geom_line(size=0.5) +
+  coord_cartesian(ylim=c(0,30000))+
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  scale_y_continuous(name = "Length", position = "right")
+
+# Readability
+graph_versions_old_readability<-ggplot(pga_old, aes(x = date, y = Flesch_Kincaid, color = platform)) +
+  theme_bw()+
+  scale_color_manual(values = colors_old)+
+  xlab(NULL) +
+  ylab("Flesch-Kincaid")+
+  labs(color = "Platform Name")+
+  geom_vline(xintercept=as.Date("2015-03-24"),color='#808080',size=0.8)+ # Manila Principles
+  geom_vline(xintercept=as.Date("2018-05-07"),color='#808080',size=0.8)+ # SCP 1.0
+  geom_vline(xintercept=as.Date("2021-11-25"),color='#808080',size=0.8)+ # DSA Council Opinion
+  annotate("text",x=as.Date("2014-01-08"), y=14, label="Manila \n Principles",color="#808080")+
+  annotate("text",x=as.Date("2016-11-07"), y=14, label="SCP 1.0",color="#808080")+
+  annotate("text",x=as.Date("2020-7-15"), y=14, label="Council \n Opinion \n on DSA ",color="#808080")+
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y")+
+  geom_point(size=1) +
+  geom_line(size=0.5) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  coord_cartesian(ylim=c(8,16))
+
+graph_versions_new_readability<-ggplot(pga_new, aes(x = date, y = Flesch_Kincaid, color = platform)) +
+  theme_bw()+
+  scale_color_manual(values = colors_new)+
+  xlab(NULL) +
+  ylab("Flesch-Kincaid")+
+  labs(color = "Platform Name")+
+  geom_vline(xintercept=as.Date("2023-08-25"),color='#808080',size=0.8)+ # DSA entering into force
+  annotate("text",x=as.Date("2023-05-10"), y=9, label="DSA entering \n into force",color="#808080")+
+  scale_x_date(date_breaks = "3 months", date_labels = "%b %Y")+
+  geom_point(size=1) +
+  geom_line(size=0.5) +
+  theme(legend.position="bottom",
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  coord_cartesian(ylim=c(8,16)) +
+  scale_y_continuous(name = "Flesch-Kincaid", position = "right")
+
+# Grouping Graphs
+figure_10 <- (graph_versions_old_tokens | graph_versions_new_tokens ) /
+  (graph_versions_old_readability | graph_versions_new_readability) +
+  plot_layout(guides = "collect") &
+  theme(legend.position = "bottom")
+figure_10
+
+# Removing unnecessary objects
+rm(df_evolution, corpus_evolution, readability_scores_evolution,
+   version_scores, pga_old, pga_new, colors_old, colors_new,
+   graph_versions_old_tokens, graph_versions_new_tokens,
+   graph_versions_old_readability, graph_versions_new_readability)
