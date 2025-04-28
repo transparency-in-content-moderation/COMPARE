@@ -1803,10 +1803,3 @@ locator = 'div.postbody'
 
 cgl_scraper(platform=platform, locator=locator)
 
-
-#### Gab
-# (ToS not CGL)
-#platform = pd.DataFrame([['Gab', 'https://gab.com/about/tos']], columns=['name', 'comguide'])
-#locator = '.pwK6B > div:nth-child(1)'
-#cgl_scraper(platform=platform, locator=locator)
-
