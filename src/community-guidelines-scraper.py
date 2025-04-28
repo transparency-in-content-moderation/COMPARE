@@ -1329,15 +1329,6 @@ scrape_multiple(platform=platform, locator1=locator, locator2=locator2, text_scr
                 locator4=locator4, additional_link=additional_link)
 
 
-#### Hatenablog
-
-platform = pd.DataFrame([['Hatenablog', 'https://help-en.hatenablog.com/entry/guideline']],
-                        columns=['name', 'comguide'])
-locator = 'div.entry-content:nth-child(2)'
-
-cgl_scraper(platform=platform, locator=locator, name_arg='_en')
-
-
 #### Stack exchange
 
 platform = comguide_links[comguide_links['name'] == 'Stack Exchange']
@@ -1519,22 +1510,6 @@ else:
     meta_all = [meta0, meta1]
 
     save_local(name=name, metadata=meta_all, cgl_text=gl_text_all, markdown=markdown_text_all)
-
-
-    #### Xiaohongshu (translation)
-
-    platform = pd.DataFrame([['Xiaohongshu', 'https://www.xiaohongshu.com/en/community_guidelines']],
-                            columns=['name', 'comguide'])
-    locator = '.main-pattern'
-
-    cgl_scraper(platform=platform, locator=locator, name_arg='_en', ignore_existing=True)
-
-    with open(os.path.join(directory_name, 'Xiaohongshu_cgl_source_en.html'),
-              encoding='UTF-8') as file:
-        html_raw = file.read()
-    md = markdownify.markdownify(html_raw, strip=['a', 'img'])
-
-    save_local(name='Xiaohongshu', markdown=md, name_arg='_en')
 
 
 #### Steam Community
@@ -1790,30 +1765,9 @@ platform = pd.DataFrame([['Bilibili', 'https://www.bilibili.com/blackboard/manga
                         columns=['name', 'comguide'])
 name = platform['name'].iloc[0]
 directory_name = os.path.join(destination_path, name)
-if os.path.exists(directory_name):
-    logging.info('Guidelines of %s already done, skipping', name)
+locator = '.t-space-container'
 
-else:
-    logging.info('Scraping guidelines of %s', name)
-
-    locator = '.t-space-container'
-
-    cgl_scraper(platform=platform, locator=locator, ignore_existing=True)
-
-
-    #### Bilibili (translation)
-
-    platform = pd.DataFrame([['Bilibili', 'https://www.bilibili.tv/marketing/protocal/communityrules_en.html']],
-                            columns=['name', 'comguide'])
-    locator = '.t-space-container'
-
-    cgl_scraper(platform=platform, locator=locator, name_arg='_en', ignore_existing=True)
-
-    with open(os.path.join(directory_name, 'Bilibili_cgl_source_en.html'), encoding='UTF-8') as file:
-        html_raw = file.read()
-    md = markdownify.markdownify(html_raw, strip=['a', 'img'])
-
-    save_local(name='Bilibili', markdown=md, name_arg='_en')
+cgl_scraper(platform=platform, locator=locator, ignore_existing=True)
 
 
 
@@ -1848,11 +1802,4 @@ platform = comguide_links[comguide_links['name'] == 'Nnmclub']
 locator = 'div.postbody'
 
 cgl_scraper(platform=platform, locator=locator)
-
-
-#### Gab
-# (ToS not CGL)
-#platform = pd.DataFrame([['Gab', 'https://gab.com/about/tos']], columns=['name', 'comguide'])
-#locator = '.pwK6B > div:nth-child(1)'
-#cgl_scraper(platform=platform, locator=locator)
 
