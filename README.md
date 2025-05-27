@@ -6,7 +6,7 @@ Moreover, we provide the text of [76 community guidelines](./data/community-guid
 In the folder [src](./src/) you can find the scripts which were used to scrape and translate the community guidelines.
 If you want to use our data, we kindly ask you to reference the corresponding paper.
 
-**Recommended Citation**: Nahrgang, M.; Weidmann, N. B.; Quint, F.; Nagel, S.; Theocharis, Y.; & Roberts, M. E. (forthcoming). Written for Lawyers or Users? Mapping the Complexity of Community Guidelines. Proceedings of the International AAAI Conference on Web and Social Media.
+**Recommended Citation**: Nahrgang, M.; Weidmann, N. B.; Quint, F.; Nagel, S.; Theocharis, Y.; & Roberts, M. E. (2025). Written for Lawyers or Users? Mapping the Complexity of Community Guidelines. Proceedings of the International AAAI Conference on Web and Social Media.
 
 
 ### 1. Platform Information 
