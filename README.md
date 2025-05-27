@@ -6,7 +6,7 @@ Moreover, we provide the text of [76 community guidelines](./data/community-guid
 In the folder [src](./src/) you can find the scripts which were used to scrape and translate the community guidelines.
 If you want to use our data, we kindly ask you to reference the corresponding paper.
 
-**Recommended Citation**: Nahrgang, M.; Weidmann, N. B.; Quint, F.; Nagel, S.; Theocharis, Y.; & Roberts, M. E. (2025). Written for Lawyers or Users? Mapping the Complexity of Community Guidelines. Proceedings of the International AAAI Conference on Web and Social Media.
+**Recommended Citation**: Nahrgang, M.; Weidmann, N. B.; Quint, F.; Nagel, S.; Theocharis, Y.; & Roberts, M. E. 2025. Written for Lawyers or Users? Mapping the Complexity of Community Guidelines. Proceedings of the International AAAI Conference on Web and Social Media.
 
 
 ### 1. Platform Information 
@@ -54,5 +54,5 @@ The 76 community guidelines can be complemented with 13 community guidelines fro
 
 ### References
 
-+ Katzenbach, C.; Dergacheva, D.; Fischer, A.; Kopps, A.; Kolesnikov, S.; Redeker, D.; and Viejo Otero, P. 2023a. Platform Governance Archive (PGA) v2.
++ Katzenbach, C.; Dergacheva, D.; Fischer, A.; Kopps, A.; Kolesnikov, S.; Redeker, D.; and Viejo Otero, P. 2023. Platform Governance Archive (PGA) v2.
 + Rajendra-Nicolucci, E. C.; and Zuckerman, E. 2021. An Illustrated Field Guide to Social Media. Knight First Amendment Institute.
