@@ -1,7 +1,7 @@
 # COMPARE (Content Moderation Policies and Reports) - Dataset
 
 This repository consists of three parts. We make available a dataset combining general information about 132 platforms with six links to websites where platforms report on different content moderation aspects [here](./data/COMPARE.csv).
-Moreover, we provide the text of [76 community guidelines](./data/community-guidelines). For more information please refer to our [ICWSM paper](INSERT LINK).
+Moreover, we provide the text of [76 community guidelines](./data/community-guidelines). For more information please refer to our [ICWSM paper](https://ojs.aaai.org/index.php/ICWSM/article/view/35873).
 
 In the folder [src](./src/) you can find the scripts which were used to scrape and translate the community guidelines.
 If you want to use our data, we kindly ask you to reference the corresponding paper.
