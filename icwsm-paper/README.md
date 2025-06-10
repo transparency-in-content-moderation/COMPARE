@@ -1,7 +1,7 @@
 # Written for Lawyers or Users? Mapping the Complexity of Community Guidelines
 
 This repository contains the [data](replication-data) and [scripts](replication-scripts) for replicating the results of our ICWSM paper 
-[Written for Lawyers or Users? Mapping the Complexity of Community Guidelines](ADD LINK).
+[Written for Lawyers or Users? Mapping the Complexity of Community Guidelines](https://ojs.aaai.org/index.php/ICWSM/article/view/35873).
 
 + [**0-main.R**](replication-scripts/0-main.R) installs and loads libraries, sets the working directory, and executes all of the following scripts
 + [**1-text-preparation.R**](replication-scripts/1-text-preparation.R) reads the community guidelines in one dataframe (text_df) and performs the text cleaning
